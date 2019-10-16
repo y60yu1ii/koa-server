@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const Koa = require('koa');
 const Router = require('koa-router');
 const app = new Koa();
@@ -8,13 +10,13 @@ const fs = require('fs');
 
 const port = 80;
 
-router.post('/open', async function(ctx) {
+router.post('/open', async function (ctx) {
     console.log('open/ POST data = ' + JSON.stringify(ctx.request.body));
     ctx.body = "OK";
 });
 
 
-router.get('/', async function(ctx) {
+router.get('/', async function (ctx) {
     ctx.response.type = 'html';
     ctx.response.body = fs.createReadStream('./index.html');
 });

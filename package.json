@@ -11,6 +11,7 @@
     "start": "forever app.js"
   },
   "dependencies": {
+    "eslint": "^6.5.1",
     "forever": "^1.0.0",
     "fs": "^0.0.1-security",
     "http": "^0.0.0",
