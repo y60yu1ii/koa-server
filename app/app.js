@@ -9,24 +9,50 @@ const server = require('http').createServer(app.callback());
 const fs = require('fs');
 
 const channelToken = require('./token.js').channelToken;
-const replyurl = require('./token.js').utl;
-
+const replyurl = require('./token.js').url;
 const port = 80;
 
+const axios = require('axios');
+
 router.post('/chatbot', async function (ctx) {
-    var msg = JSON.parse(ctx.request.body);
-    console.log(msg);
+    var msg = ctx.request.body;
+    console.log(JSON.stringify(msg));
     var replyToken = msg.events[0].replyToken;
     var userMessage = msg.events[0].message.text;
+
+    console.log(replyurl);
 
     if (typeof replyToken === 'undefined') {
         return;
     }
 
+    let config = {
+        headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer ' + channelToken,
+        }
+    };
+
+    let data = JSON.stringify({
+        'replyToken': replyToken,
+        'messages': [{
+            'type': 'text',
+            'text': userMessage + ' ( aws )',
+        }],
+    });
+
+    axios.post(replyurl, data, config)
+        .then((res) => {
+            console.log("send back from line " + res);
+        })
+        .catch((error) => { console.error(error); });
+
 });
 
+
 router.post('/open', async function (ctx) {
-    console.log('open/ POST data = ' + JSON.stringify(ctx.request.body));
+    var msg = ctx.request.body;
+    console.log('open/ POST data = ' + JSON.stringify(msg));
     ctx.body = "OK";
 });
 
